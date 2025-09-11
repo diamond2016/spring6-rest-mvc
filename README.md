@@ -10,4 +10,8 @@ Da verificare enable annotation processors e obtain processors from project clas
 1. Generato il progetto da zero con initializer spring
 2. Pubblicato versione iniziale
 
+Facciamo riferimento all'api di test https://api.springframework.guru/api/v1/beer, verificata con Postman
+Da notare uso di UUID per id bean unico (sarà usato in chiave primaria in persistenza), di LocalDateTime per le date,
+di BigDecimal per i valori valuta (float).
+ 
 

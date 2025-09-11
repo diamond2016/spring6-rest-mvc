@@ -4,8 +4,10 @@ import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
+import lombok.Builder;
 import lombok.Data;
 
+@Builder
 @Data
 public class Beer {
     private UUID id;
