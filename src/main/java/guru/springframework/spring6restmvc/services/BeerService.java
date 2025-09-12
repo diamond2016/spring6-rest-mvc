@@ -1,9 +1,16 @@
 package guru.springframework.spring6restmvc.services;
 
-import java.util.UUID;
-
 import guru.springframework.spring6restmvc.model.Beer;
 
+import java.util.List;
+import java.util.UUID;
+
+/**
+ * Created by jt, Spring Framework Guru.
+ */
 public interface BeerService {
-    Beer getBeerByID(UUID id);
+
+    List<Beer> listBeers();
+
+    Beer getBeerById(UUID id);
 }

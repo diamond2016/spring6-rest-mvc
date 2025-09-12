@@ -1,5 +1,6 @@
 package guru.springframework.spring6restmvc.controller;
 
+import java.util.List;
 import java.util.UUID;
 
 import org.springframework.stereotype.Controller;
@@ -19,7 +20,13 @@ public class BeerController {
 
         log.debug("Get Beer by Id - in controller. Id: " + id.toString());
         
-        return beerService.getBeerByID(id);
+        return beerService.getBeerById(id);
     }
 
+    public List<Beer> listBeers() {
+
+        log.debug("List Beers - in controller ");
+        
+        return beerService.listBeers();
+    }
 }
