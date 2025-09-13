@@ -1,7 +1,6 @@
 package guru.springframework.spring6restmvc.controller;
 
 import java.util.List;
-import java.util.UUID;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
