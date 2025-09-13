@@ -20,13 +20,6 @@ import lombok.extern.slf4j.Slf4j;
 public class CustomerController {
     private final CustomerService customerService;
 
-    public Customer getCustomerByID(UUID id) {
-
-        log.debug("Get Customer by Id - in controller. Id: " + id.toString());
-        
-        return customerService.getCustomerById(id);
-    }
-
     @RequestMapping(method = RequestMethod.GET, value = "{customerId}") 
     // customerId is also a path variable in requests
     public Customer getCustomerById(@PathVariable("customerId") UUID customerId) {

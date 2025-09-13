@@ -35,7 +35,7 @@ public class CustomerControllerTest {
         List<Customer> myList = customerController.listCustomers();
         UUID id = myList.get(0).getId();
         System.out.println(id.toString());
-        System.out.println(customerController.getCustomerByID(id).toString());
+        System.out.println(customerController.getCustomerById(id));
 
         assertEquals(myList.size(), 3);
     }
