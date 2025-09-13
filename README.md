@@ -1,19 +1,16 @@
 ### Spring Framework 6
-**Servizi RESTful in Spring Boot**
+**RESTful in Spring Boot**
 
-- Utilizza il progetto Lombok
-- Creato con Spring initializer java >=17 maven e dependencies Spring Boot Web
-- Necessario plugin Lombok in IDE
+- Use project Lombok
+- Created with Spring initializer java >=17 maven & dependencies Spring Boot Web
+- Written in VsCode
 
-Da verificare enable annotation processors e obtain processors from project claspath per abilitare Lombok (da vedere cosa ha senso su VsCode)
 
-1. Generato il progetto da zero con initializer spring
-2. Pubblicato versione iniziale
-3. Generati models, services and controllers via Lombok annotations
-4. Creato primo servizio REST e testato con Postman (Service e Controller listBeers)
+1. Gerenated project (initializer spring)
+3. models, services and controllers via Lombok annotations
+4. First service RESTful, tested with Postman (Service e Controller: Beer)
+5. Second service RESTful, (Customer)
 
-Facciamo riferimento all'api di test https://api.springframework.guru/api/v1/beer, verificata con Postman
-Da notare uso di UUID per id bean unico (sarà usato in chiave primaria in persistenza), di LocalDateTime per le date,
-di BigDecimal per i valori valuta (float).
+From Spring Framework 6: Beginner to Guru course.
  
 
