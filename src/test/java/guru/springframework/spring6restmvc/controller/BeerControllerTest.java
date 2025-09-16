@@ -20,7 +20,7 @@ public class BeerControllerTest {
     void testGetBeerByID() {
         log.debug("Test getBeerByID");
         List<Beer> beers = beerController.listBeers();
-        System.out.println(beerController.getBeerByID(beers.getFirst().getId()));
+        System.out.println(beerController.getBeerById(beers.getFirst().getId()));
     }
 
     @Test
