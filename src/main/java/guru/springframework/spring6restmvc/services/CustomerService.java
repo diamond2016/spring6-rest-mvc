@@ -11,4 +11,6 @@ public interface CustomerService {
     
     public Customer getCustomerById(UUID id);
 
+    public Customer saveNewCustomer(Customer customer);
+
 }
