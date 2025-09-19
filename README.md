@@ -9,7 +9,7 @@
 1. Gerenated project (initializer spring)
 3. models, services and controllers via Lombok annotations
 4. First service RESTful, tested with Postman (Service e Controller: Beer)
-5. Second service RESTful, (Customer)
+5. Second service RESTful, ((Service e Controller: Customer))
 
 From Spring Framework 6: Beginner to Guru course.
  
