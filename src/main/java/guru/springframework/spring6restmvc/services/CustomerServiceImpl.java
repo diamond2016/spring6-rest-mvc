@@ -8,6 +8,7 @@ import java.util.Map;
 import java.util.UUID;
 
 import org.springframework.stereotype.Service;
+
 import guru.springframework.spring6restmvc.model.Customer;
 import lombok.extern.slf4j.Slf4j;
 
@@ -73,8 +74,25 @@ public class CustomerServiceImpl implements CustomerService {
                 .build();
 
         customerMap.put(savedCustomer.getId(), savedCustomer);
-         log.debug("saved new Customer, id: {}", customer.getId());
-         return savedCustomer;
+        log.debug("saved new Customer, id: {}", customer.getId());
+        return savedCustomer;
+    }
+
+    @Override
+    public void updateCustomerById(UUID customerId, Customer customer) {
+
+        Customer existingCustomer = customerMap.get(customerId);
+        if (existingCustomer == null)
+            return;
+
+        existingCustomer.setCustomerName(customer.getCustomerName());
+        existingCustomer.setVersion(customer.getVersion());
+        existingCustomer.setCreatedDate(customer.getCreatedDate());
+        existingCustomer.setLastModifiedDate(LocalDateTime.now());
+
+        customerMap.put(existingCustomer.getId(), existingCustomer);
+        log.debug("update Customer, id: {}", customer.getId());
+        return;
     }
 }
 

@@ -13,4 +13,6 @@ public interface CustomerService {
 
     public Customer saveNewCustomer(Customer customer);
 
+    public void updateCustomerById(UUID customerId, Customer customer);
+
 }
