@@ -8,6 +8,7 @@ import java.util.Map;
 import java.util.UUID;
 
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 
 import guru.springframework.spring6restmvc.model.Customer;
 import lombok.extern.slf4j.Slf4j;
@@ -104,6 +105,29 @@ public class CustomerServiceImpl implements CustomerService {
         
         customerMap.remove(customerId);
         log.debug("delete Customer, id: {}", customerId);
+    }
+
+    @Override
+    public void patchCustomerById(UUID customerId, Customer customer) {
+        Customer existingCustomer = customerMap.get(customerId);
+        if (existingCustomer == null)
+            return;
+
+        if (StringUtils.hasText(customer.getCustomerName())) {
+            existingCustomer.setCustomerName(customer.getCustomerName());
+        }
+
+        if (customer.getVersion() != null) {
+            existingCustomer.setVersion(customer.getVersion());
+        }
+
+        if (customer.getCreatedDate() != null) {
+            existingCustomer.setCreatedDate(customer.getCreatedDate());
+        }
+        if (customer.getLastModifiedDate() != null) {
+            existingCustomer.setLastModifiedDate(customer.getLastModifiedDate());
+        }
+
     }
 }
 

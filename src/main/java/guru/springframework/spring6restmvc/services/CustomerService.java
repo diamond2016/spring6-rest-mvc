@@ -7,13 +7,15 @@ import guru.springframework.spring6restmvc.model.Customer;
 
 public interface CustomerService {
 
-    public List<Customer> listCustomers(); 
+    List<Customer> listCustomers(); 
     
-    public Customer getCustomerById(UUID id);
+    Customer getCustomerById(UUID id);
 
-    public Customer saveNewCustomer(Customer customer);
+    Customer saveNewCustomer(Customer customer);
 
-    public void updateCustomerById(UUID customerId, Customer customer);
+    void updateCustomerById(UUID customerId, Customer customer);
 
     void deleteCustomerById(UUID customerId);
+
+    void patchCustomerById(UUID customerId, Customer customer);
 }

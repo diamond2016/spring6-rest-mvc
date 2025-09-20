@@ -8,6 +8,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -68,6 +69,12 @@ public class CustomerController {
         log.debug("delete Customer of Id - in controller id: {}", customerId);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
-
+    
+    @PatchMapping("{customerId}")
+    public ResponseEntity<Void> updateCustomerPatchById(@PathVariable("customerId") UUID customerId, @RequestBody Customer customer) {
+        customerService.patchCustomerById(customerId, customer);
+        log.debug("update Customer patch of ID - in controller id: {}", customerId);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
 
 }
