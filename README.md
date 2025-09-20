@@ -11,6 +11,6 @@
 4. Services RESTful, tested with Postman (Service e Controller: Beer)
 5. Services RESTful, (Service e Controller: Customer)
 
-From Spring Framework 6: Beginner to Guru course.
+From Spring Framework 6: Beginner to Guru course [rest-mvc](https://github.com/springframeworkguru/spring-6-rest-mvc)
  
 

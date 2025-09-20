@@ -16,7 +16,7 @@ public class Beer {
     private BeerStyle beerStyle;
     private String upc;
     private BigDecimal price;
-    private int quantityOnHand;
+    private Integer quantityOnHand;
     private LocalDateTime createdDate;
     private LocalDateTime updateDate;
 }
