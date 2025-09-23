@@ -9,10 +9,17 @@ import org.springframework.http.MediaType;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
 
+import static org.hamcrest.core.Is.is;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.BDDMockito.given;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 
+import guru.springframework.spring6restmvc.model.Beer;
 import guru.springframework.spring6restmvc.services.BeerService;
+import guru.springframework.spring6restmvc.services.BeerServiceImpl;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
@@ -28,18 +35,32 @@ public class BeerControllerTest {
     @MockitoBean  
     BeerService beerService; 
 
+    BeerServiceImpl beerServiceImpl = new BeerServiceImpl();
+
     @Test
-    void testGetBeerByID() throws Exception {
+    void testGetBeerById() throws Exception {
         log.debug("Test via Mockito and MockMvc getBeerByID");
         // System.out.println(beerController.getBeerById(beers.getFirst().getId()));
+        Beer testBeer = beerServiceImpl.listBeers().get(0);
+        
+        given(beerService.getBeerById(any(UUID.class))).willReturn(testBeer);
+        
         mockMvc.perform(get("/api/v1/beer/" + UUID.randomUUID())
             .accept(MediaType.APPLICATION_JSON))
-            .andExpect(status().isOk());
+            .andExpect(status().isOk())     // 200
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+            .andExpect(jsonPath("$.id", is(testBeer.getId().toString())))
+            .andExpect(jsonPath("$.beerName", is(testBeer.getBeerName())));
     }
 
     @Test
-    void testlistBeers() {
+    void testListBeers() throws Exception {
         log.debug("Test listBeers");
-        //System.out.println(beerController.listBeers());
+        given(beerService.listBeers()).willReturn(beerServiceImpl.listBeers());
+
+        mockMvc.perform(get("/api/v1/beer").accept(MediaType.APPLICATION_JSON))
+            .andExpect(status().isOk())
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+            .andExpect(jsonPath("$.length()", is(3)));
     }
 }
