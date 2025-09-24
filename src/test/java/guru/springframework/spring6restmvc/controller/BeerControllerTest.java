@@ -57,7 +57,8 @@ public class BeerControllerTest {
         log.debug("Test listBeers");
         given(beerService.listBeers()).willReturn(beerServiceImpl.listBeers());
 
-        mockMvc.perform(get("/api/v1/beer").accept(MediaType.APPLICATION_JSON))
+        mockMvc.perform(get("/api/v1/beer")
+            .accept(MediaType.APPLICATION_JSON))
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON))
             .andExpect(jsonPath("$.length()", is(3)));
