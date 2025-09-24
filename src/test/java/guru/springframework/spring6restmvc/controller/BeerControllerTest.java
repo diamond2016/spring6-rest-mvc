@@ -2,6 +2,7 @@ package guru.springframework.spring6restmvc.controller;
 
 import java.util.UUID;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
@@ -9,10 +10,15 @@ import org.springframework.http.MediaType;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+
 import static org.hamcrest.core.Is.is;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.header;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 
@@ -34,7 +40,15 @@ public class BeerControllerTest {
     @MockitoBean  
     BeerService beerService; 
 
-    BeerServiceImpl beerServiceImpl = new BeerServiceImpl();
+    @Autowired
+    ObjectMapper objectMapper; // serializza/deserializza json pojo <-> json
+
+    BeerServiceImpl beerServiceImpl;
+
+    @BeforeEach
+    void setUp() {
+        beerServiceImpl = new BeerServiceImpl(); // rigenera il servizio ogni volta
+    }
 
     @Test
     void testGetBeerById() throws Exception {
@@ -63,4 +77,26 @@ public class BeerControllerTest {
             .andExpect(content().contentType(MediaType.APPLICATION_JSON))
             .andExpect(jsonPath("$.length()", is(3)));
     }
+
+    @Test
+    void testCreateNewBeer() throws Exception {
+        Beer beerToSave = beerServiceImpl.listBeers().get(0);
+        beerToSave.setId(null);
+        beerToSave.setVersion(null);
+
+        Beer savedBeer = Beer.builder()
+                .id(UUID.randomUUID())
+                .beerName("New Beer")
+                .build();
+
+        given(beerService.saveNewBeer(any(Beer.class))).willReturn(savedBeer);
+        
+        mockMvc.perform(post("/api/v1/beer")
+            .accept(MediaType.APPLICATION_JSON)
+            .contentType(MediaType.APPLICATION_JSON)
+            .content(objectMapper.writeValueAsString(beerToSave)))
+            .andExpect(status().isCreated())                        // then
+            .andExpect(header().exists("Location"));                // then
+    }
+
 }
