@@ -74,7 +74,7 @@ public class BeerControllerTest {
         mockMvc.perform(get("/api/v1/beer")
             .accept(MediaType.APPLICATION_JSON))
             .andExpect(status().isOk())
-            .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON))  // context of the response
             .andExpect(jsonPath("$.length()", is(3)));
     }
 
@@ -94,9 +94,9 @@ public class BeerControllerTest {
         mockMvc.perform(post("/api/v1/beer")
             .accept(MediaType.APPLICATION_JSON)
             .contentType(MediaType.APPLICATION_JSON)
-            .content(objectMapper.writeValueAsString(beerToSave)))
+            .content(objectMapper.writeValueAsString(beerToSave)))  // context of the request
             .andExpect(status().isCreated())                        // then
-            .andExpect(header().exists("Location"));                // then
+            .andExpect(header().string("Location", "/api/v1/beer/" + savedBeer.getId())); // check exact url of location url+id
     }
 
 }
