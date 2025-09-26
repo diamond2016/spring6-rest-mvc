@@ -5,6 +5,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.verify;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
@@ -16,8 +17,10 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import java.util.List;
 import java.util.UUID;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.ArgumentCaptor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -125,5 +128,17 @@ public class CustomerControllerTest {
             .andExpect(status().isNoContent());
         
         verify(customerService).updateCustomerById(any(UUID.class), any(Customer.class)); // verify mockito mock controller is called
+    }
+
+    @Test 
+    void testDeleteCustomer() throws Exception {
+        Customer customerToDelete = customerServiceImpl.listCustomers().get(0);
+        mockMvc.perform(delete("/api/v1/customer/" + customerToDelete.getId())
+            .accept(MediaType.APPLICATION_JSON))
+            .andExpect(status().isNoContent());
+
+        ArgumentCaptor<UUID> uuidArgumentCaptor = ArgumentCaptor.forClass(UUID.class); // class that capture all of that type
+        verify(customerService).deleteCustomerById(uuidArgumentCaptor.capture());
+        assertThat(customerToDelete.getId()).isEqualTo(uuidArgumentCaptor.getValue()); // parameter passed in call to service check
     }
 }

@@ -4,6 +4,7 @@ import java.util.UUID;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.ArgumentCaptor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.http.MediaType;
@@ -12,10 +13,12 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.core.Is.is;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.verify;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
@@ -110,6 +113,19 @@ public class BeerControllerTest {
             .content(objectMapper.writeValueAsString(beerToUpdate)))
             .andExpect(status().isNoContent());
   
-        verify(beerService).updateBeerById(any(UUID.class), any(Beer.class)); // verify mockito mock controller is called
+        verify(beerService).updateBeerById(any(UUID.class), any(Beer.class)); // verify mockito mock can call service
     }
+
+    @Test
+    void testDeleteBeer() throws Exception {
+        Beer beerToDelete = beerServiceImpl.listBeers().get(0);
+        mockMvc.perform(delete("/api/v1/beer/" + beerToDelete.getId())
+            .accept(MediaType.APPLICATION_JSON))
+            .andExpect(status().isNoContent());
+
+        ArgumentCaptor<UUID> uuidArgumentCaptor = ArgumentCaptor.forClass(UUID.class); // class that capture all of that type
+        verify(beerService).deleteBeerById(uuidArgumentCaptor.capture());
+        assertThat(beerToDelete.getId()).isEqualTo(uuidArgumentCaptor.getValue()); // parameter passed in call to service check 
+    }
+
 }
