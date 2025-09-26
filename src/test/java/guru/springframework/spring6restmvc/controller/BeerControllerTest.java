@@ -15,8 +15,10 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import static org.hamcrest.core.Is.is;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.verify;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.header;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -99,4 +101,15 @@ public class BeerControllerTest {
             .andExpect(header().string("Location", "/api/v1/beer/" + savedBeer.getId())); // check exact url of location url+id
     }
 
+    @Test
+    void testUpdateBeer() throws Exception {
+        Beer beerToUpdate = beerServiceImpl.listBeers().get(0);
+        mockMvc.perform(put("/api/v1/beer/" + beerToUpdate.getId())
+            .accept(MediaType.APPLICATION_JSON)
+            .contentType(MediaType.APPLICATION_JSON)
+            .content(objectMapper.writeValueAsString(beerToUpdate)))
+            .andExpect(status().isNoContent());
+  
+        verify(beerService).updateBeerById(any(UUID.class), any(Beer.class)); // verify mockito mock controller is called
+    }
 }
