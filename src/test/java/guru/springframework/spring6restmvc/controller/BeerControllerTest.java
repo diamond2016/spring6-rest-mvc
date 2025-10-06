@@ -72,7 +72,7 @@ public class BeerControllerTest {
         
         given(beerService.getBeerById(testBeer.getId())).willReturn(testBeer);
         
-        mockMvc.perform(get(BeerController.BEER_PATH + "/" + testBeer.getId())
+        mockMvc.perform(get(BeerController.BEER_PATH_ID, testBeer.getId())
             .accept(MediaType.APPLICATION_JSON))
             .andExpect(status().isOk())     // 200
             .andExpect(content().contentType(MediaType.APPLICATION_JSON))
@@ -116,7 +116,7 @@ public class BeerControllerTest {
     @Test
     void testUpdateBeer() throws Exception {
         Beer beerToUpdate = beerServiceImpl.listBeers().get(0);
-        mockMvc.perform(put(BeerController.BEER_PATH  + "/" + beerToUpdate.getId())
+        mockMvc.perform(put(BeerController.BEER_PATH_ID, beerToUpdate.getId())
             .accept(MediaType.APPLICATION_JSON)
             .contentType(MediaType.APPLICATION_JSON)
             .content(objectMapper.writeValueAsString(beerToUpdate)))
@@ -128,7 +128,7 @@ public class BeerControllerTest {
     @Test
     void testDeleteBeer() throws Exception {
         Beer beerToDelete = beerServiceImpl.listBeers().get(0);
-        mockMvc.perform(delete(BeerController.BEER_PATH + "/" + beerToDelete.getId())
+        mockMvc.perform(delete(BeerController.BEER_PATH_ID, beerToDelete.getId())
             .accept(MediaType.APPLICATION_JSON))
             .andExpect(status().isNoContent());
 
@@ -142,7 +142,7 @@ public class BeerControllerTest {
         Map<String, Object> beerMap = new HashMap<>();
         beerMap.put("beerName", "new Name");
 
-        mockMvc.perform(patch(BeerController.BEER_PATH + "/" + beerToPatch.getId())
+        mockMvc.perform(patch(BeerController.BEER_PATH_ID, beerToPatch.getId())
             .accept(MediaType.APPLICATION_JSON)
             .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(beerMap))) // body json of the patch request (key-value)

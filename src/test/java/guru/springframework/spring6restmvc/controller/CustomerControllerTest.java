@@ -88,7 +88,7 @@ public class CustomerControllerTest {
 
         given(customerService.getCustomerById(testCustomer.getId())).willReturn(testCustomer);
 
-        mockMvc.perform(get(CustomerController.CUSTOMER_PATH + "/" + testCustomer.getId())
+        mockMvc.perform(get(CustomerController.CUSTOMER_PATH_ID, testCustomer.getId())
             .accept(MediaType.APPLICATION_JSON))
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON))
@@ -126,7 +126,7 @@ public class CustomerControllerTest {
     @Test
     void testUpdateCustomer() throws Exception {
         Customer customerToUpdate = customerServiceImpl.listCustomers().get(0);
-        mockMvc.perform(put(CustomerController.CUSTOMER_PATH + "/" + customerToUpdate.getId())
+        mockMvc.perform(put(CustomerController.CUSTOMER_PATH_ID, customerToUpdate.getId())
             .accept(MediaType.APPLICATION_JSON)
             .contentType(MediaType.APPLICATION_JSON)
             .content(objectMapper.writeValueAsString(customerToUpdate)))
@@ -138,7 +138,7 @@ public class CustomerControllerTest {
     @Test 
     void testDeleteCustomer() throws Exception {
         Customer customerToDelete = customerServiceImpl.listCustomers().get(0);
-        mockMvc.perform(delete(CustomerController.CUSTOMER_PATH + "/" + customerToDelete.getId())
+        mockMvc.perform(delete(CustomerController.CUSTOMER_PATH_ID, customerToDelete.getId())
             .accept(MediaType.APPLICATION_JSON))
             .andExpect(status().isNoContent());
 
@@ -152,7 +152,7 @@ public class CustomerControllerTest {
         Map<String, Object> customerMap = new HashMap<>();
         customerMap.put("customerName", "newName");
 
-        mockMvc.perform(patch(CustomerController.CUSTOMER_PATH + "/" + customerToPatch.getId())
+        mockMvc.perform(patch(CustomerController.CUSTOMER_PATH_ID, customerToPatch.getId())
             .accept(MediaType.APPLICATION_JSON)
             .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(customerMap)))
