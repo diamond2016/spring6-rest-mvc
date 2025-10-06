@@ -72,7 +72,7 @@ public class BeerControllerTest {
         
         given(beerService.getBeerById(testBeer.getId())).willReturn(testBeer);
         
-        mockMvc.perform(get("/api/v1/beer/" + testBeer.getId())
+        mockMvc.perform(get(BeerController.BEER_PATH + "/" + testBeer.getId())
             .accept(MediaType.APPLICATION_JSON))
             .andExpect(status().isOk())     // 200
             .andExpect(content().contentType(MediaType.APPLICATION_JSON))
@@ -85,7 +85,7 @@ public class BeerControllerTest {
         log.debug("Test listBeers");
         given(beerService.listBeers()).willReturn(beerServiceImpl.listBeers());
 
-        mockMvc.perform(get("/api/v1/beer")
+        mockMvc.perform(get(BeerController.BEER_PATH)
             .accept(MediaType.APPLICATION_JSON))
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON))  // context of the response
@@ -105,18 +105,18 @@ public class BeerControllerTest {
 
         given(beerService.saveNewBeer(any(Beer.class))).willReturn(savedBeer);
         
-        mockMvc.perform(post("/api/v1/beer")
+        mockMvc.perform(post(BeerController.BEER_PATH)
             .accept(MediaType.APPLICATION_JSON)
             .contentType(MediaType.APPLICATION_JSON)
             .content(objectMapper.writeValueAsString(beerToSave)))  // context of the request
             .andExpect(status().isCreated())                        // then
-            .andExpect(header().string("Location", "/api/v1/beer/" + savedBeer.getId())); // check exact url of location url+id
+            .andExpect(header().string("Location", BeerController.BEER_PATH + "/" + savedBeer.getId())); // check exact url of location url+id
     }
 
     @Test
     void testUpdateBeer() throws Exception {
         Beer beerToUpdate = beerServiceImpl.listBeers().get(0);
-        mockMvc.perform(put("/api/v1/beer/" + beerToUpdate.getId())
+        mockMvc.perform(put(BeerController.BEER_PATH  + "/" + beerToUpdate.getId())
             .accept(MediaType.APPLICATION_JSON)
             .contentType(MediaType.APPLICATION_JSON)
             .content(objectMapper.writeValueAsString(beerToUpdate)))
@@ -128,7 +128,7 @@ public class BeerControllerTest {
     @Test
     void testDeleteBeer() throws Exception {
         Beer beerToDelete = beerServiceImpl.listBeers().get(0);
-        mockMvc.perform(delete("/api/v1/beer/" + beerToDelete.getId())
+        mockMvc.perform(delete(BeerController.BEER_PATH + "/" + beerToDelete.getId())
             .accept(MediaType.APPLICATION_JSON))
             .andExpect(status().isNoContent());
 
@@ -142,7 +142,7 @@ public class BeerControllerTest {
         Map<String, Object> beerMap = new HashMap<>();
         beerMap.put("beerName", "new Name");
 
-        mockMvc.perform(patch("/api/v1/beer/" + beerToPatch.getId())
+        mockMvc.perform(patch(BeerController.BEER_PATH + "/" + beerToPatch.getId())
             .accept(MediaType.APPLICATION_JSON)
             .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(beerMap))) // body json of the patch request (key-value)

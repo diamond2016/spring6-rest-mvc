@@ -34,10 +34,7 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import guru.springframework.spring6restmvc.model.Beer;
 import guru.springframework.spring6restmvc.model.Customer;
-import guru.springframework.spring6restmvc.services.BeerService;
-import guru.springframework.spring6restmvc.services.BeerServiceImpl;
 import guru.springframework.spring6restmvc.services.CustomerService;
 import guru.springframework.spring6restmvc.services.CustomerServiceImpl;
 import lombok.extern.slf4j.Slf4j;
@@ -74,7 +71,7 @@ public class CustomerControllerTest {
         log.debug("test listCustomers ");
         given(customerService.listCustomers()).willReturn(customerServiceImpl.listCustomers());
 
-        mockMvc.perform(get("/api/v1/customer"))
+        mockMvc.perform(get(CustomerController.CUSTOMER_PATH))
          //   .accept(MediaType.APPLICATION_JSON))
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON))
@@ -91,7 +88,7 @@ public class CustomerControllerTest {
 
         given(customerService.getCustomerById(testCustomer.getId())).willReturn(testCustomer);
 
-        mockMvc.perform(get("/api/v1/customer/" + testCustomer.getId())
+        mockMvc.perform(get(CustomerController.CUSTOMER_PATH + "/" + testCustomer.getId())
             .accept(MediaType.APPLICATION_JSON))
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON))
@@ -118,18 +115,18 @@ public class CustomerControllerTest {
                 .build();
 
         given(customerService.saveNewCustomer(any(Customer.class))).willReturn(savedCustomer);
-        mockMvc.perform(post("/api/v1/customer")
+        mockMvc.perform(post(CustomerController.CUSTOMER_PATH)
             .accept(MediaType.APPLICATION_JSON)
             .contentType(MediaType.APPLICATION_JSON)
             .content(objectMapper.writeValueAsString(customerToSave)))  // context of the request
             .andExpect(status().isCreated())                        // then
-            .andExpect(header().string("Location", "/api/v1/customer/" + savedCustomer.getId())); // check exact url of location url+id
+            .andExpect(header().string("Location", CustomerController.CUSTOMER_PATH + "/" + savedCustomer.getId())); // check exact url of location url+id
     }
 
     @Test
     void testUpdateCustomer() throws Exception {
         Customer customerToUpdate = customerServiceImpl.listCustomers().get(0);
-        mockMvc.perform(put("/api/v1/customer/" + customerToUpdate.getId())
+        mockMvc.perform(put(CustomerController.CUSTOMER_PATH + "/" + customerToUpdate.getId())
             .accept(MediaType.APPLICATION_JSON)
             .contentType(MediaType.APPLICATION_JSON)
             .content(objectMapper.writeValueAsString(customerToUpdate)))
@@ -141,7 +138,7 @@ public class CustomerControllerTest {
     @Test 
     void testDeleteCustomer() throws Exception {
         Customer customerToDelete = customerServiceImpl.listCustomers().get(0);
-        mockMvc.perform(delete("/api/v1/customer/" + customerToDelete.getId())
+        mockMvc.perform(delete(CustomerController.CUSTOMER_PATH + "/" + customerToDelete.getId())
             .accept(MediaType.APPLICATION_JSON))
             .andExpect(status().isNoContent());
 
@@ -155,7 +152,7 @@ public class CustomerControllerTest {
         Map<String, Object> customerMap = new HashMap<>();
         customerMap.put("customerName", "newName");
 
-        mockMvc.perform(patch("/api/v1/customer/" + customerToPatch.getId())
+        mockMvc.perform(patch(CustomerController.CUSTOMER_PATH + "/" + customerToPatch.getId())
             .accept(MediaType.APPLICATION_JSON)
             .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(customerMap)))
