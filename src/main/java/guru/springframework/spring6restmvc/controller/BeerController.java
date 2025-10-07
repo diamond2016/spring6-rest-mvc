@@ -7,6 +7,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -44,6 +45,13 @@ public class BeerController {
         log.debug("List Beers - in controller ");
         
         return beerService.listBeers();
+    }
+
+    // if in this controller will occur NotFound as default SpringBoot, will return the custom exception instead as response
+    @ExceptionHandler(NotFoundException.class)
+    public ResponseEntity<Void> handleNotFoundException() {
+        System.out.println("In exception handler...");
+        return ResponseEntity.notFound().build();
     }
 
     @PostMapping(BEER_PATH)
