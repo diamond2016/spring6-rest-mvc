@@ -5,9 +5,9 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
 // global for all controllers
-@ControllerAdvice
+// @ControllerAdvice
 public class ExceptionController {
-    @ExceptionHandler(NotFoundException.class)
+    // @ExceptionHandler(NotFoundException.class)
     public ResponseEntity<Void> handleNotFoundException() {
         System.out.println("In exception controller (advice)...");
         return ResponseEntity.notFound().build();
