@@ -60,7 +60,7 @@ public class CustomerServiceImpl implements CustomerService {
     public Optional<Customer> getCustomerById(UUID id) {
          log.debug("getCustomerById from service: id: " + id);
         
-         return Optional.of(customerMap.get(id));
+         return Optional.ofNullable(customerMap.get(id));
     }
 
     @Override
@@ -131,4 +131,3 @@ public class CustomerServiceImpl implements CustomerService {
 
     }
 }
-
