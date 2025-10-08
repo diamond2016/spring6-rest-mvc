@@ -2,6 +2,7 @@ package guru.springframework.spring6restmvc.controller;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 import java.util.UUID;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -67,7 +68,7 @@ public class BeerControllerTest {
     @Test
     void getBeerByIdNotFound() throws Exception {
 
-        given(beerService.getBeerById(any(UUID.class))).willThrow(NotFoundException.class);
+        given(beerService.getBeerById(any(UUID.class))).willReturn(Optional.empty());
 
         mockMvc.perform(get(BeerController.BEER_PATH_ID, UUID.randomUUID()))
             .andExpect(status().isNotFound());
@@ -79,7 +80,7 @@ public class BeerControllerTest {
         // System.out.println(beerController.getBeerById(beers.getFirst().getId()));
         Beer testBeer = beerServiceImpl.listBeers().get(0);
         
-        given(beerService.getBeerById(testBeer.getId())).willReturn(testBeer);
+        given(beerService.getBeerById(testBeer.getId())).willReturn(Optional.of(testBeer));
         
         mockMvc.perform(get(BeerController.BEER_PATH_ID, testBeer.getId())
             .accept(MediaType.APPLICATION_JSON))

@@ -35,7 +35,7 @@ public class CustomerController {
 
         log.debug("get Customer from ID - in controller id: {}", customerId);
         
-        return customerService.getCustomerById(customerId);
+        return customerService.getCustomerById(customerId).orElseThrow(NotFoundException::new);
     }
 
     @GetMapping(CUSTOMER_PATH)

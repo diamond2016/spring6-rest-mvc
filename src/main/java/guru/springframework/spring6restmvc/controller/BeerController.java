@@ -36,7 +36,7 @@ public class BeerController {
 
         log.debug("get Beer from ID - in controller id: {}", beerId);
         
-        return beerService.getBeerById(beerId);
+        return beerService.getBeerById(beerId).orElseThrow(NotFoundException::new);
     }
 
     @GetMapping(BEER_PATH)
@@ -48,11 +48,11 @@ public class BeerController {
     }
 
     // if in this controller will occur NotFound as default SpringBoot, will return the custom exception instead as response
-    @ExceptionHandler(NotFoundException.class)
-    public ResponseEntity<Void> handleNotFoundException() {
-        System.out.println("In exception handler...");
-        return ResponseEntity.notFound().build();
-    }
+    //@ExceptionHandler(NotFoundException.class)
+    //public ResponseEntity<Void> handleNotFoundException() {
+    //    System.out.println("In exception handler...");
+    //    return ResponseEntity.notFound().build();
+    //}
 
     @PostMapping(BEER_PATH)
     public ResponseEntity<Void> handlePost(@RequestBody Beer beer) {
