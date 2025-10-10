@@ -3,6 +3,8 @@
 
 - Use project Lombok and Mockito for tests
 - Created with Spring initializer java 21 maven & dependencies Spring Boot Web
+- Jpa and Mapstruct for entities management
+- H2 database
 - Written in VsCode
 - Support for containerization with Docker
 
@@ -14,6 +16,10 @@
 5. Test of controllers via mockmvc
 
 From Spring Framework 6: Beginner to Guru course [rest-mvc](https://github.com/springframeworkguru/spring-6-rest-mvc)
+
+10.10.2025
+Upgrade of project to Spring Boot 3.5.0 has been successful, and MapStruct (1.6.0) and Lombok configurations
+
 
  
 
