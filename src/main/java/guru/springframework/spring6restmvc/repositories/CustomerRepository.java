@@ -4,8 +4,8 @@ import java.util.UUID;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 
-import guru.springframework.spring6restmvc.entities.Beer;
+import guru.springframework.spring6restmvc.entities.Customer;
 
-public interface CustomerRepository extends JpaRepository<Beer, UUID> {
+public interface CustomerRepository extends JpaRepository<Customer, UUID> {
 
 }
