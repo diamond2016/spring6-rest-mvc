@@ -12,14 +12,15 @@ import guru.springframework.spring6restmvc.model.BeerStyle;
 import guru.springframework.spring6restmvc.model.CustomerDTO; 
 import guru.springframework.spring6restmvc.repositories.BeerRepository;
 import guru.springframework.spring6restmvc.repositories.CustomerRepository;
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @Component
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class BootstrapData implements CommandLineRunner {
 
+    // note this implementation uses DTO so needs mappers call
     private final BeerRepository beerRepository;
     private final CustomerRepository customerRepository;
     private final BeerMapper beerMapper;
