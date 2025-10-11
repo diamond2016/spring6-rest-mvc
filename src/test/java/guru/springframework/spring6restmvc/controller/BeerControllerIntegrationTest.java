@@ -9,6 +9,8 @@ import java.util.UUID;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.annotation.Rollback;
+import org.springframework.transaction.annotation.Transactional;
 
 import guru.springframework.spring6restmvc.model.BeerDTO;
 import guru.springframework.spring6restmvc.repositories.BeerRepository;
@@ -41,6 +43,16 @@ public class BeerControllerIntegrationTest {
     void testListBeers() {
         List<BeerDTO> dtos = beerController.listBeers();
         assertThat(dtos.size()).isEqualTo(2);
-        log.debug("listBeers - in integration test. Size: " + dtos.size());
+        log.debug("testListBeers - in integration test. Size: " + dtos.size());
+    }
+
+    @Rollback
+    @Transactional
+    @Test
+    void testEmptyListBeers() {
+        beerRepository.deleteAll();
+        List<BeerDTO> dtos = beerController.listBeers();
+        assertThat(dtos.size()).isEqualTo(0);
+        log.debug("testEmptyListBeers - in integration test with no data. Size: " + dtos.size());
     }
 }
