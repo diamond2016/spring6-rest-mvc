@@ -3,6 +3,7 @@ package guru.springframework.spring6restmvc.services;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Service;
@@ -22,14 +23,21 @@ public class BeerServiceJPA implements BeerService {
 
 	@Override
 	public List<BeerDTO> listBeers() {
-		// TODO: implement method
-		return null;
+		return beerRepository.findAll()
+				.stream()
+				.map(beerMapper::beerToBeerDTO)
+				.collect(Collectors.toList());
 	}
+/*
+ *  beerRepository.findById(id).map(beerMapper::beerToBeerDTO) clearly expresses the intent: "Find the beer by ID, and if it exists, map it to a BeerDTO."
+	Null-Safety: The map operation is only performed if the Optional returned by findById contains a value. If it's empty, map does nothing 
+	and returns an empty Optional.
+ */
 
 	@Override
 	public Optional<BeerDTO> getBeerById(UUID id) {
-		// TODO: implement method
-		return Optional.empty();
+		return beerRepository.findById(id)
+				.map(beerMapper::beerToBeerDTO); 
 	}
 
 	@Override
