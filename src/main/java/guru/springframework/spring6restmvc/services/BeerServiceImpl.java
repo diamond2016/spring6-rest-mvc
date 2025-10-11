@@ -34,7 +34,7 @@ public class BeerServiceImpl implements BeerService {
                 .price(new BigDecimal("12.99"))
                 .quantityOnHand(122)
                 .createdDate(LocalDateTime.now())
-                .updateDate(LocalDateTime.now())
+                .lastModifiedDate(LocalDateTime.now())
                 .build();
 
         BeerDTO beer2 = BeerDTO.builder()
@@ -46,7 +46,7 @@ public class BeerServiceImpl implements BeerService {
                 .price(new BigDecimal("11.99"))
                 .quantityOnHand(392)
                 .createdDate(LocalDateTime.now())
-                .updateDate(LocalDateTime.now())
+                .lastModifiedDate(LocalDateTime.now())
                 .build();
 
         BeerDTO beer3 = BeerDTO.builder()
@@ -58,7 +58,7 @@ public class BeerServiceImpl implements BeerService {
                 .price(new BigDecimal("13.99"))
                 .quantityOnHand(144)
                 .createdDate(LocalDateTime.now())
-                .updateDate(LocalDateTime.now())
+                .lastModifiedDate(LocalDateTime.now())
                 .build();
 
         beerMap.put(beer1.getId(), beer1);
@@ -93,7 +93,7 @@ public class BeerServiceImpl implements BeerService {
                 .price(beer.getPrice())
                 .quantityOnHand(beer.getQuantityOnHand())
                 .createdDate(LocalDateTime.now())
-                .updateDate(LocalDateTime.now())
+                .lastModifiedDate(LocalDateTime.now())
                 .build();
                 
         beerMap.put(savedBeer.getId(), savedBeer);
@@ -112,7 +112,7 @@ public class BeerServiceImpl implements BeerService {
         existingBeer.setUpc(beer.getUpc());
         existingBeer.setPrice(beer.getPrice());
         existingBeer.setQuantityOnHand(beer.getQuantityOnHand());
-        existingBeer.setUpdateDate(LocalDateTime.now());
+        existingBeer.setLastModifiedDate(LocalDateTime.now());
 
         beerMap.put(existingBeer.getId(), existingBeer);
         return;
@@ -162,8 +162,8 @@ public class BeerServiceImpl implements BeerService {
             existingBeer.setCreatedDate(beer.getCreatedDate());
         }
         
-        if (beer.getUpdateDate() != null) {
-            existingBeer.setUpdateDate(beer.getUpdateDate());
+        if (beer.getLastModifiedDate() != null) {
+            existingBeer.setLastModifiedDate(beer.getLastModifiedDate());
         }
 
     }
