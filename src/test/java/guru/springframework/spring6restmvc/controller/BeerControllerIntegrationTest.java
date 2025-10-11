@@ -27,15 +27,19 @@ public class BeerControllerIntegrationTest {
 
     @Test
     void testGetBeerById() {
-        UUID notFoundId = UUID.randomUUID();
-        assertThrows(NotFoundException.class, () -> beerController.getBeerById(notFoundId));
-
         List<BeerDTO> dtos = beerController.listBeers();
         UUID foundId = dtos.get(0).getId();
         BeerDTO dto = beerController.getBeerById(foundId);
         assertThat(dto).isNotNull();
         assertThat(dto.getBeerName()).isEqualTo(dtos.get(0).getBeerName());
         log.debug("get Beer by Id - in integration test. name: " + dto.getBeerName());
+
+    }
+    @Test
+    void testGetBeerByNotFoundId() {
+        UUID notFoundId = UUID.randomUUID();
+        assertThrows(NotFoundException.class, () -> beerController.getBeerById(notFoundId));
+        log.debug("get Beer by not found Id - in integration test. ramdom id ");
 
     }
 
