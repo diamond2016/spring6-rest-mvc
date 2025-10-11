@@ -5,8 +5,6 @@ import java.time.LocalDateTime;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 
-import guru.springframework.spring6restmvc.entities.Beer;
-import guru.springframework.spring6restmvc.entities.Customer;
 import guru.springframework.spring6restmvc.mappers.BeerMapper;
 import guru.springframework.spring6restmvc.mappers.CustomerMapper;
 import guru.springframework.spring6restmvc.model.BeerDTO;
@@ -56,8 +54,8 @@ public class BootstrapData implements CommandLineRunner {
                 .lastModifiedDate(LocalDateTime.now())
                 .build();
 
-            beerRepository.save(beerMapper.beerDtoToBeer(morettiDto));
-            beerRepository.save(beerMapper.beerDtoToBeer(villacherDto));
+            beerRepository.save(beerMapper.beerDTOToBeer(morettiDto));
+            beerRepository.save(beerMapper.beerDTOToBeer(villacherDto));
 
             log.info("Loaded Beer Data. Beer count: " + beerRepository.count());
         }
@@ -77,8 +75,8 @@ public class BootstrapData implements CommandLineRunner {
                     .lastModifiedDate(LocalDateTime.now())
                     .build();
 
-            customerRepository.save(customerMapper.customerDtoToCustomer(allItalianDto));
-            customerRepository.save(customerMapper.customerDtoToCustomer(villacherRestaurantDto));
+            customerRepository.save(customerMapper.customerDTOToCustomer(allItalianDto));
+            customerRepository.save(customerMapper.customerDTOToCustomer(villacherRestaurantDto));
 
             log.info("Loaded Customer Data. Customer count: " + customerRepository.count());
         }
