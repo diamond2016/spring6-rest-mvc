@@ -3,15 +3,19 @@ package guru.springframework.spring6restmvc.controller;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.http.HttpStatusCode;
+import org.springframework.http.ResponseEntity;
 import org.springframework.test.annotation.Rollback;
 import org.springframework.transaction.annotation.Transactional;
 
+import guru.springframework.spring6restmvc.entities.Beer;
 import guru.springframework.spring6restmvc.model.BeerDTO;
 import guru.springframework.spring6restmvc.repositories.BeerRepository;
 import lombok.extern.slf4j.Slf4j;
@@ -36,7 +40,7 @@ public class BeerControllerIntegrationTest {
 
     }
     @Test
-    void testGetBeerByNotFoundId() {
+    void testGetBeerByIdNotFound() {
         UUID notFoundId = UUID.randomUUID();
         assertThrows(NotFoundException.class, () -> beerController.getBeerById(notFoundId));
         log.debug("get Beer by not found Id - in integration test. ramdom id ");
@@ -58,5 +62,26 @@ public class BeerControllerIntegrationTest {
         List<BeerDTO> dtos = beerController.listBeers();
         assertThat(dtos.size()).isEqualTo(0);
         log.debug("testEmptyListBeers - in integration test with no data. Size: " + dtos.size());
+    }
+
+    @Rollback
+    @Transactional
+    @Test
+    void testSaveNewBeer() {
+        BeerDTO beerDTO = BeerDTO.builder()
+            .beerName("New Beer to insert")
+            .createdDate(LocalDateTime.now())
+            .lastModifiedDate(LocalDateTime.now())
+            .build();
+
+        ResponseEntity<Void> responseEntity = beerController.handlePost(beerDTO);
+        assertThat(responseEntity.getStatusCode()).isEqualTo(HttpStatusCode.valueOf(201)); // 201 = CREATED
+        assertThat(responseEntity.getHeaders().getLocation()).isNotNull();
+        
+        String[] locationUUID = responseEntity.getHeaders().getLocation().getPath().split("/");
+        UUID savedUUID = UUID.fromString(locationUUID[locationUUID.length -1]);
+        Beer savedBeer = beerRepository.findById(savedUUID).get(); // optional
+        assertThat(savedBeer).isNotNull();
+
     }
 }
