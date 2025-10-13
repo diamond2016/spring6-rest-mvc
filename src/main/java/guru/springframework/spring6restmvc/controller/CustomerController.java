@@ -58,7 +58,8 @@ public class CustomerController {
     }
 
     @PutMapping(CUSTOMER_PATH_ID)
-    public ResponseEntity<Void> updateCustomerById(@PathVariable("customerId") UUID customerId, @RequestBody CustomerDTO customer) {
+    public ResponseEntity<Void> updateCustomerById(@PathVariable("customerId") UUID customerId, 
+                                @RequestBody CustomerDTO customer) {
         customerService.updateCustomerById(customerId, customer);
         log.debug("update Customer of Id - in controller id: {}", customerId);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
@@ -72,7 +73,8 @@ public class CustomerController {
     }
     
     @PatchMapping(CUSTOMER_PATH_ID)
-    public ResponseEntity<Void> updateCustomerPatchById(@PathVariable("customerId") UUID customerId, @RequestBody CustomerDTO customer) {
+    public ResponseEntity<Void> updateCustomerPatchById(@PathVariable("customerId") UUID customerId, 
+                                                        @RequestBody CustomerDTO customer) {
         customerService.patchCustomerById(customerId, customer);
         log.debug("update Customer patch of ID - in controller id: {}", customerId);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);

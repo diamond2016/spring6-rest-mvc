@@ -46,7 +46,7 @@ public class BeerController {
         return beerService.listBeers();
     }
 
-    // if in this controller will occur NotFound as default SpringBoot, will return the custom exception instead as response
+    // if in this controller will occur NotFound SpringBoot, will return the custom exception instead as response
     //@ExceptionHandler(NotFoundException.class)
     //public ResponseEntity<Void> handleNotFoundException() {
     //    System.out.println("In exception handler...");

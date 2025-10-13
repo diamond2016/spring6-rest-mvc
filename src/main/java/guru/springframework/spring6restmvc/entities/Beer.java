@@ -6,6 +6,7 @@ import java.util.UUID;
 
 import org.hibernate.annotations.UuidGenerator;
 
+import guru.springframework.spring6restmvc.model.BeerStyle;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -16,7 +17,8 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import guru.springframework.spring6restmvc.model.BeerStyle;
+
+
 
 @Getter                     // @Data not recommended for entities
 @Setter

@@ -118,10 +118,9 @@
 				<version>3.3.1</version>
 				<configuration>
 					<configLocation>checkstyle.xml</configLocation>
-					<encoding>UTF-8</encoding>
 					<consoleOutput>true</consoleOutput>
 					<failsOnError>false</failsOnError>
-					<!-- Skip running Checkstyle by default; run with -Dcheckstyle.skip=false when you want to enforce -->
+					<!-- Skip running Checkstyle by default; run with -Dcheckstyle.skip=false when you want to enforce commented out -->
 					<skip>true</skip>
 					<linkXRef>false</linkXRef>
 				</configuration>
