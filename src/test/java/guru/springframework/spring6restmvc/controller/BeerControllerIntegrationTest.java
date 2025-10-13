@@ -106,4 +106,14 @@ public class BeerControllerIntegrationTest {
         assertThat(updateBeer.getBeerName()).isEqualTo(newName);
 
     }
+
+    @Test
+    void updateBeerByIdNotFound() throws Exception {
+
+        UUID notFoundId = UUID.randomUUID();
+        BeerDTO beerDTOToUpdate = BeerDTO.builder().build();
+        assertThrows(NotFoundException.class, () -> beerController.updateBeerById(notFoundId, beerDTOToUpdate));
+        log.debug("update Beer by not found Id - in integration test. ramdom id ");
+    }
+
 }
