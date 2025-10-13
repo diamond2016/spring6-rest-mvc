@@ -1,5 +1,6 @@
 package guru.springframework.spring6restmvc.services;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -48,9 +49,17 @@ public class BeerServiceJPA implements BeerService {
 
     @Override
     public void updateBeerById(UUID id, BeerDTO beerDTO) {
-        // TODO: implement method
+        beerRepository.findById(id).ifPresent(existingBeer -> {
+            existingBeer.setBeerName((beerDTO.getBeerName()));
+            existingBeer.setBeerStyle(beerDTO.getBeerStyle());
+            existingBeer.setUpc(beerDTO.getUpc());
+            existingBeer.setPrice(beerDTO.getPrice());
+            existingBeer.setQuantityOnHand(beerDTO.getQuantityOnHand());
+            existingBeer.setLastModifiedDate(LocalDateTime.now());
+            beerRepository.save(existingBeer);
+        });
     }
-
+    
     @Override
     public void deleteBeerById(UUID id) {
         // TODO: implement method

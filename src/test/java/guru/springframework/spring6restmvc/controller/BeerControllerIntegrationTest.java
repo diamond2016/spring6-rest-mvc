@@ -16,6 +16,7 @@ import org.springframework.test.annotation.Rollback;
 import org.springframework.transaction.annotation.Transactional;
 
 import guru.springframework.spring6restmvc.entities.Beer;
+import guru.springframework.spring6restmvc.mappers.BeerMapper;
 import guru.springframework.spring6restmvc.model.BeerDTO;
 import guru.springframework.spring6restmvc.repositories.BeerRepository;
 import lombok.extern.slf4j.Slf4j;
@@ -28,6 +29,8 @@ public class BeerControllerIntegrationTest {
     BeerController beerController;
     @Autowired
     BeerRepository beerRepository;
+    @Autowired
+    BeerMapper beerMapper;
 
     @Test
     void testGetBeerById() {
@@ -82,6 +85,25 @@ public class BeerControllerIntegrationTest {
         UUID savedUUID = UUID.fromString(locationUUID[locationUUID.length -1]);
         Beer savedBeer = beerRepository.findById(savedUUID).get(); // optional
         assertThat(savedBeer).isNotNull();
+
+    }
+
+    @Rollback
+    @Transactional
+    @Test
+    void testUpdateBeerById() {
+        Beer beerToUpdate = beerRepository.findAll().get(0);
+        BeerDTO beerDTOToUpdate = beerMapper.beerToBeerDTO(beerToUpdate);
+        beerDTOToUpdate.setId(null);
+        beerDTOToUpdate.setVersion(null);
+        String newName = beerToUpdate.getBeerName() + "updated";
+        beerDTOToUpdate.setBeerName(newName);
+        
+        ResponseEntity<Void> responseEntity = beerController.updateBeerById(beerToUpdate.getId(), beerDTOToUpdate);
+        assertThat(responseEntity.getStatusCode()).isEqualTo(HttpStatusCode.valueOf(204)); // 201 = NO CONTENT
+
+        Beer updateBeer = beerRepository.findById(beerToUpdate.getId()).get();
+        assertThat(updateBeer.getBeerName()).isEqualTo(newName);
 
     }
 }
