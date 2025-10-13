@@ -117,13 +117,10 @@ public class BeerServiceImpl implements BeerService {
     }
 
     @Override
-    public void deleteBeerById(UUID beerId) {
-        BeerDTO existingBeer = beerMap.get(beerId);
-        if (existingBeer == null)
-            return;
-        
+    public Boolean deleteBeerById(UUID beerId) {
+        BeerDTO existingBeer = beerMap.get(beerId);      
         beerMap.remove(existingBeer.getId());
-        return;
+        return true;
     }
 
     @Override

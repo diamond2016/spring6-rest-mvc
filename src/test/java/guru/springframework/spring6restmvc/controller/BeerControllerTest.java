@@ -141,6 +141,10 @@ public class BeerControllerTest {
     @Test
     void testDeleteBeer() throws Exception {
         BeerDTO beerToDelete = beerServiceImpl.listBeers().get(0);
+
+        given(beerService.deleteBeerById(any())).willReturn(true);
+        // does not modify data but calls put starting from an Optional value not null
+
         mockMvc.perform(delete(BeerController.BEER_PATH_ID, beerToDelete.getId())
             .accept(MediaType.APPLICATION_JSON))
             .andExpect(status().isNoContent());

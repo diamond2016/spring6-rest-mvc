@@ -116,4 +116,25 @@ public class BeerControllerIntegrationTest {
         log.debug("update Beer by not found Id - in integration test. ramdom id ");
     }
 
+    @Rollback
+    @Transactional
+    @Test
+    void testDeleteBeerById() {
+        Beer beerToDelete = beerRepository.findAll().get(0);
+
+        ResponseEntity<Void> responseEntity = beerController.deleteBeerById(beerToDelete.getId());
+        assertThat(responseEntity.getStatusCode()).isEqualTo(HttpStatusCode.valueOf(204)); // 201 = NO CONTENT
+        assertThrows(NotFoundException.class, () -> beerController.getBeerById(beerToDelete.getId()));
+
+    }
+
+    @Test
+    void deleteBeerByIdNotFound() throws Exception {
+
+        UUID notFoundId = UUID.randomUUID();
+        assertThrows(NotFoundException.class, () -> beerController.deleteBeerById(notFoundId));
+        log.debug("delete Beer by not found Id - in integration test. ramdom id ");
+    }
+
+
 }
