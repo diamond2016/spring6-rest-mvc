@@ -1,5 +1,6 @@
 package guru.springframework.spring6restmvc.controller;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.core.Is.is;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
@@ -19,7 +20,6 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
 
-import static org.assertj.core.api.Assertions.assertThat;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;
@@ -133,6 +133,8 @@ public class CustomerControllerTest {
     @Test
     void testUpdateCustomer() throws Exception {
         CustomerDTO customerToUpdate = customerServiceImpl.listCustomers().get(0);
+        given(customerService.updateCustomerById(any(), any())).willReturn(Optional.of(customerToUpdate));
+
         mockMvc.perform(put(CustomerController.CUSTOMER_PATH_ID, customerToUpdate.getId())
             .accept(MediaType.APPLICATION_JSON)
             .contentType(MediaType.APPLICATION_JSON)

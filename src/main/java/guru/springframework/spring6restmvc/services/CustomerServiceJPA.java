@@ -1,5 +1,6 @@
 package guru.springframework.spring6restmvc.services;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -41,13 +42,23 @@ public class CustomerServiceJPA implements CustomerService {
     }
 
     @Override
-    public void updateCustomerById(UUID id, CustomerDTO customerDTO) {
-        // TODO: Implement this method
+    public Optional<CustomerDTO> updateCustomerById(UUID id, CustomerDTO customerDTO) {
+        return customerRepository.findById(id)
+        .map(existingCustomer -> {    // map returns authomatically Optional.empty if not present 
+            existingCustomer.setCustomerName(customerDTO.getCustomerName());
+            existingCustomer.setLastModifiedDate(LocalDateTime.now());
+            return customerMapper.customerToCustomerDTO(customerRepository.save(existingCustomer));
+        });
     }
 
     @Override
-    public void deleteCustomerById(UUID id) {
-        // TODO: Implement this method
+    public Boolean deleteCustomerById(UUID id) {
+        if (customerRepository.existsById(id)) {
+            customerRepository.deleteById(id);
+            return true;
+        }
+        
+        return false;
     }
 
     @Override

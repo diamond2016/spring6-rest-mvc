@@ -60,14 +60,16 @@ public class CustomerController {
     @PutMapping(CUSTOMER_PATH_ID)
     public ResponseEntity<Void> updateCustomerById(@PathVariable("customerId") UUID customerId, 
                                 @RequestBody CustomerDTO customer) {
-        customerService.updateCustomerById(customerId, customer);
+
+        customerService.updateCustomerById(customerId, customer).orElseThrow(NotFoundException::new);
         log.debug("update Customer of Id - in controller id: {}", customerId);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
     @DeleteMapping(CUSTOMER_PATH_ID)
     public ResponseEntity<Void> deleteCustomerById(@PathVariable("customerId") UUID customerId) {
-        customerService.deleteCustomerById(customerId);
+        if (!customerService.deleteCustomerById(customerId))
+            throw new NotFoundException();
         log.debug("delete Customer of Id - in controller id: {}", customerId);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
