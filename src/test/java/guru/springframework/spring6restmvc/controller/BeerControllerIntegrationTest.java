@@ -136,5 +136,30 @@ public class BeerControllerIntegrationTest {
         log.debug("delete Beer by not found Id - in integration test. ramdom id ");
     }
 
+    @Rollback
+    @Transactional
+    @Test
+    void testPatchBeerById() {
+        Beer beerToPatch = beerRepository.findAll().get(0);
+        BeerDTO beerDTOToPatch = beerMapper.beerToBeerDTO(beerToPatch);
+        beerDTOToPatch.setId(null);
+        beerDTOToPatch.setVersion(null);
+        String newName = beerToPatch.getBeerName() + "updated";
+        beerDTOToPatch.setBeerName(newName);
+        
+        ResponseEntity<Void> responseEntity = beerController.patchBeerById(beerToPatch.getId(), beerDTOToPatch);
+        assertThat(responseEntity.getStatusCode()).isEqualTo(HttpStatusCode.valueOf(204)); // 201 = NO CONTENT
+
+        Beer patchBeer = beerRepository.findById(beerToPatch.getId()).get();
+        assertThat(patchBeer.getBeerName()).isEqualTo(newName);
+    }
+
+    @Test
+    void testPatchBeerByIdNotFound() {
+        UUID notFoundId = UUID.randomUUID();
+        BeerDTO beerDTOToPatch = BeerDTO.builder().build();
+        assertThrows(NotFoundException.class, () -> beerController.patchBeerById(notFoundId, beerDTOToPatch));
+        log.debug("patch Beer by not found Id - in integration test. ramdom id ");
+    }
 
 }

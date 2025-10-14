@@ -124,10 +124,8 @@ public class BeerServiceImpl implements BeerService {
     }
 
     @Override
-    public void patchBeerById(UUID beerId, BeerDTO beer) {
+    public Optional<BeerDTO> patchBeerById(UUID beerId, BeerDTO beer) {
         BeerDTO existingBeer = beerMap.get(beerId);
-        if (existingBeer == null)
-            return;
 
         if (StringUtils.hasText(beer.getBeerName())) {
             existingBeer.setBeerName(beer.getBeerName());
@@ -160,7 +158,7 @@ public class BeerServiceImpl implements BeerService {
         if (beer.getLastModifiedDate() != null) {
             existingBeer.setLastModifiedDate(beer.getLastModifiedDate());
         }
-
+        return Optional.ofNullable(beerMap.get(beerId));
     }
 
 }

@@ -71,7 +71,15 @@ public class BeerServiceJPA implements BeerService {
     }
 
     @Override
-    public void patchBeerById(UUID id, BeerDTO beerDTO) {
-        // TODO: implement method
+    public Optional<BeerDTO> patchBeerById(UUID id, BeerDTO beerDTO) {
+        return beerRepository.findById(id).map(existingBeer -> {    // map returns authomatically Optional.empty if not present 
+            existingBeer.setBeerName(beerDTO.getBeerName());
+            existingBeer.setBeerStyle(beerDTO.getBeerStyle());
+            existingBeer.setUpc(beerDTO.getUpc());
+            existingBeer.setPrice(beerDTO.getPrice());
+            existingBeer.setQuantityOnHand(beerDTO.getQuantityOnHand());
+            existingBeer.setLastModifiedDate(LocalDateTime.now());
+            return beerMapper.beerToBeerDTO(beerRepository.save(existingBeer));
+        });
     }
 }
