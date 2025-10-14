@@ -3,6 +3,7 @@ package guru.springframework.spring6restmvc.controller;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
 
@@ -106,6 +107,27 @@ public class CustomerControllerIntegrationTest {
 
         assertThrows(NotFoundException.class, () -> customerController.deleteCustomerById(notFoundId));
         log.debug("update Customer by not found Id - in integration test. ramdom id ");
+    }
+
+    @Rollback
+    @Transactional
+    @Test
+    void testSaveNewCustomer() {
+        CustomerDTO customerDTO = CustomerDTO.builder()
+            .customerName("New Customer to insert")
+            .createdDate(LocalDateTime.now())
+            .lastModifiedDate(LocalDateTime.now())
+            .build();
+
+        ResponseEntity<Void> responseEntity = customerController.handlePost(customerDTO);
+        assertThat(responseEntity.getStatusCode()).isEqualTo(HttpStatusCode.valueOf(201)); // 201 = CREATED
+        assertThat(responseEntity.getHeaders().getLocation()).isNotNull();
+        
+        String[] locationUUID = responseEntity.getHeaders().getLocation().getPath().split("/");
+        UUID savedUUID = UUID.fromString(locationUUID[locationUUID.length -1]);
+        Customer savedCustomer = customerRepository.findById(savedUUID).get(); // optional
+        assertThat(savedCustomer).isNotNull();
+
     }
 }
 
