@@ -3,6 +3,12 @@ target/
 .mvn/wrapper/maven-wrapper.jar
 !**/src/main/**/target/
 !**/src/test/**/target/
+.gitignore
+.dockerignore
+.checkstyle.xml
+Dockefile
+mvnw*.*
+*.json
 
 ### STS ###
 .apt_generated
@@ -31,3 +37,5 @@ build/
 
 ### VS Code ###
 .vscode/
+.github
+.mvn
