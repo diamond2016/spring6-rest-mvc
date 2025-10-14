@@ -61,7 +61,12 @@ public class CustomerServiceJPA implements CustomerService {
     }
 
     @Override
-    public void patchCustomerById(UUID id, CustomerDTO customerDTO) {
-        // TODO: Implement this method
+    public Optional<CustomerDTO> patchCustomerById(UUID id, CustomerDTO customerDTO) {
+        return customerRepository.findById(id)
+        .map(existingCustomer -> {    // map returns authomatically Optional.empty if not present 
+            existingCustomer.setCustomerName(customerDTO.getCustomerName());
+            existingCustomer.setLastModifiedDate(LocalDateTime.now());
+            return customerMapper.customerToCustomerDTO(customerRepository.save(existingCustomer));
+        });
     }
 }

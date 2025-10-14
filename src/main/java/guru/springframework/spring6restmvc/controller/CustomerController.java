@@ -75,10 +75,10 @@ public class CustomerController {
     }
     
     @PatchMapping(CUSTOMER_PATH_ID)
-    public ResponseEntity<Void> updateCustomerPatchById(@PathVariable("customerId") UUID customerId, 
+    public ResponseEntity<Void> patchCustomerById(@PathVariable("customerId") UUID customerId, 
                                                         @RequestBody CustomerDTO customer) {
-        customerService.patchCustomerById(customerId, customer);
-        log.debug("update Customer patch of ID - in controller id: {}", customerId);
+        customerService.patchCustomerById(customerId, customer).orElseThrow(NotFoundException::new);
+        log.debug("patch Customer patch of ID - in controller id: {}", customerId);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 

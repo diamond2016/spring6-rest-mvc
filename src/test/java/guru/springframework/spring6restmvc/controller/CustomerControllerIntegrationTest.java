@@ -129,5 +129,36 @@ public class CustomerControllerIntegrationTest {
         assertThat(savedCustomer).isNotNull();
 
     }
+
+    @Rollback
+    @Transactional
+    @Test
+    void testPatchCustomerById() {
+        UUID customerDtoIdToPatch = customerRepository.findAll().get(0).getId();
+        CustomerDTO customerDTOToPatch = CustomerDTO.builder().build();
+        customerDTOToPatch.setId(null);
+        customerDTOToPatch.setVersion(null);
+        String newName = "updated";
+        customerDTOToPatch.setCustomerName(newName);
+        
+        ResponseEntity<Void> responseEntity = customerController.patchCustomerById(customerDtoIdToPatch, customerDTOToPatch);
+        assertThat(responseEntity.getStatusCode()).isEqualTo(HttpStatusCode.valueOf(204)); // 204 = NO CONTENT
+
+        Customer patchCustomer = customerRepository.findById(customerDtoIdToPatch).get();
+        assertThat(patchCustomer.getCustomerName()).isEqualTo(newName);
+        log.debug("update Customer by found Id - in integration test. id " + customerDtoIdToPatch); 
+    }
+
+    @Test
+    void testUpdateCustomerByNotFound() {
+
+        UUID notFoundId = UUID.randomUUID();
+        CustomerDTO customerDTOToPatch = CustomerDTO.builder().build();
+        assertThrows(NotFoundException.class, () -> customerController.patchCustomerById(notFoundId, customerDTOToPatch));
+        log.debug("update Customer by not found Id - in integration test. ramdom id ");
+    }
+
+
+
 }
 
