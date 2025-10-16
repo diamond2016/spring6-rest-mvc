@@ -6,6 +6,7 @@ import java.util.UUID;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
@@ -53,8 +54,8 @@ public class BeerController {
     //    return ResponseEntity.notFound().build();
     //}
 
-    @PostMapping(BEER_PATH)
-    public ResponseEntity<Void> handlePost(@RequestBody BeerDTO beer) {
+    @PostMapping(BEER_PATH) 
+    public ResponseEntity<Void> handlePost(@Validated @RequestBody BeerDTO beer) { //@Validated activate JPA validation
 
         BeerDTO savedBeer = beerService.saveNewBeer(beer); 
 
