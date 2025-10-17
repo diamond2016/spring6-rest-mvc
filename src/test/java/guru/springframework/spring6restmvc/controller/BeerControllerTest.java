@@ -29,6 +29,7 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.MvcResult;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -176,11 +177,13 @@ public class BeerControllerTest {
         BeerDTO beerDTO = BeerDTO.builder().build();
         given(beerService.saveNewBeer(any(BeerDTO.class))).willReturn(beerServiceImpl.listBeers().get(1)); // 1 to bypass eventual new value?
 
-        mockMvc.perform(post(BeerController.BEER_PATH)
+        MvcResult mvcResult = mockMvc.perform(post(BeerController.BEER_PATH)
             .accept(MediaType.APPLICATION_JSON)
             .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(beerDTO))) // body json of the patch request (key-value)
-            .andExpect(status().isBadRequest());                    // http 400 BadRequest due to validation error
+            .andExpect(status().isBadRequest()).andReturn();                    // http 400 BadRequest due to validation error
+
+            System.out.println("testCreatedSaveNewBeerNullName field errors list:\n" + mvcResult.getResponse().getContentAsString());
     }
 
 }
