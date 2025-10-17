@@ -147,6 +147,8 @@ public class CustomerControllerTest {
     @Test 
     void testDeleteCustomer() throws Exception {
         CustomerDTO customerToDelete = customerServiceImpl.listCustomers().get(0);
+        given(customerService.deleteCustomerById(any())).willReturn(true);  // if not uses default of method:false (not found)
+
         mockMvc.perform(delete(CustomerController.CUSTOMER_PATH_ID, customerToDelete.getId())
             .accept(MediaType.APPLICATION_JSON))
             .andExpect(status().isNoContent());
@@ -160,6 +162,7 @@ public class CustomerControllerTest {
         CustomerDTO customerToPatch = customerServiceImpl.listCustomers().get(0);
         Map<String, Object> customerMap = new HashMap<>();
         customerMap.put("customerName", "newName");
+        given(customerService.patchCustomerById(any(), any(CustomerDTO.class))).willReturn(Optional.of(customerToPatch));  // if not uses default of method:false (not found)
 
         mockMvc.perform(patch(CustomerController.CUSTOMER_PATH_ID, customerToPatch.getId())
             .accept(MediaType.APPLICATION_JSON)
