@@ -4,8 +4,10 @@ import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
+import jakarta.validation.constraints.DecimalMin;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Positive;
 import lombok.Builder;
 import lombok.Data;
 
@@ -20,10 +22,21 @@ public class BeerDTO {
     @NotNull
     private String beerName;
     
+    @NotNull
     private BeerStyle beerStyle;
+
+    @NotBlank
+    @NotNull
     private String upc;
+
+    @DecimalMin("1")
+    @NotNull
     private BigDecimal price;
+
+    @Positive
+    @NotNull
     private Integer quantityOnHand;
+    
     private LocalDateTime createdDate;
     private LocalDateTime lastModifiedDate;
 }
