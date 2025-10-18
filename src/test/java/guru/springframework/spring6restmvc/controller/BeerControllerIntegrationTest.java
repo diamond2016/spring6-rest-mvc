@@ -13,7 +13,11 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.annotation.Rollback;
+import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+import org.springframework.transaction.TransactionSystemException;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.context.WebApplicationContext;
 
 import guru.springframework.spring6restmvc.entities.Beer;
 import guru.springframework.spring6restmvc.mappers.BeerMapper;
@@ -31,6 +35,14 @@ public class BeerControllerIntegrationTest {
     BeerRepository beerRepository;
     @Autowired
     BeerMapper beerMapper;
+    @Autowired
+    WebApplicationContext wac;
+
+    MockMvc mockMvc;
+
+    void setUp() {
+      mockMvc = MockMvcBuilders.webAppContextSetup(wac).build();  // for validations in repositories
+    }
 
     @Test
     void testGetBeerById() {
@@ -162,4 +174,20 @@ public class BeerControllerIntegrationTest {
         log.debug("patch Beer by not found Id - in integration test. ramdom id ");
     }
 
+    @Test
+    void testUpdateBeerBlankName() throws Exception {
+        BeerDTO beerDTOToUpdate = beerMapper.beerToBeerDTO(beerRepository.findAll().get(0));
+        beerDTOToUpdate.setBeerName("");
+
+        assertThrows(TransactionSystemException.class, () -> 
+            { beerController.updateBeerById(beerDTOToUpdate.getId(), beerDTOToUpdate); });           
+    
+    /* Spring returns one or more fieldError with structure like this;        [
+    {
+        "field": "beerName",
+        "defaultMessage": "must not be blank"
+    }
+    at controller level Validation error is tranformed ad Transaction error
+    */
+    }
 }

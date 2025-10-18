@@ -1,12 +1,17 @@
 package guru.springframework.spring6restmvc.repositories;
 
-import guru.springframework.spring6restmvc.entities.Beer;
-
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+
+import java.math.BigDecimal;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+
+import guru.springframework.spring6restmvc.entities.Beer;
+import guru.springframework.spring6restmvc.model.BeerStyle;
+import jakarta.validation.ConstraintViolationException;
 
 @DataJpaTest
 public class BeerRepositoryTest {
@@ -18,13 +23,48 @@ public class BeerRepositoryTest {
     void testSaveNewBeer() {
         Beer beer = Beer.builder()
                 .beerName("Test Beer")
+                .beerStyle(BeerStyle.IPA)
                 .upc("123456789012")
+                .price(BigDecimal.valueOf(12.3))
+                .quantityOnHand(200)
                 .build();
 
         Beer savedBeer = beerRepository.save(beer);
+        beerRepository.flush(); // necessary otherwise Hybernate uses cache
 
         assertThat(savedBeer.getId()).isNotNull();
         assertThat(savedBeer.getBeerName().equals("Test Beer"));
+    }
+
+    @Test
+    void testSaveNewBeerNullName() {
+        Beer beer = Beer.builder()
+            .beerStyle(BeerStyle.IPA)
+            .upc("123456789012")
+            .price(BigDecimal.valueOf(12.3))
+            .quantityOnHand(200)
+            .build();
+
+        assertThrows(ConstraintViolationException.class, () -> {
+            beerRepository.save(beer);
+            beerRepository.flush();
+        });
+    }
+
+    @Test
+    void testSaveNewBeerTooLongName() {
+        Beer beer = Beer.builder()
+                .beerName("1234567890asbvdgrtgh1234567890asbvdgrtgh1234567890asbvdgrtgh")
+                .beerStyle(BeerStyle.IPA)
+                .upc("123456789012")
+                .price(BigDecimal.valueOf(12.3))
+                .quantityOnHand(200)
+                .build();
+        assertThrows(ConstraintViolationException.class, () -> {
+            beerRepository.save(beer);
+        // assertThrows(DataIntegrityViolationException.class, () -> { beerRepository.flush(); });  this is without @Size on entity
+            beerRepository.flush(); });
+
     }
 
     @Test

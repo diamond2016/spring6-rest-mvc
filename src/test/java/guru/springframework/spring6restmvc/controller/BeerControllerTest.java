@@ -30,6 +30,7 @@ import org.springframework.http.MediaType;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
+import org.springframework.web.context.WebApplicationContext;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -43,8 +44,6 @@ import lombok.extern.slf4j.Slf4j;
 @WebMvcTest(BeerController.class) // we say: test only this controller class if not inserted will prepare to test all controllers
 public class BeerControllerTest {
 
-    //@Autowired
-    // private BeerController beerController;
     @Autowired
     MockMvc mockMvc;
 
@@ -53,6 +52,9 @@ public class BeerControllerTest {
 
     @Autowired
     ObjectMapper objectMapper; // serializza/deserializza json pojo <-> json
+
+    @Autowired
+    WebApplicationContext wac;     
 
     BeerServiceImpl beerServiceImpl;
 
@@ -63,6 +65,7 @@ public class BeerControllerTest {
 
     @BeforeEach
     void setUp() {
+  
         beerServiceImpl = new BeerServiceImpl(); // rigenera il servizio ogni volta
     }
 
@@ -202,4 +205,6 @@ public class BeerControllerTest {
         
         System.out.println("field errors\n:" + mvcResult.getResponse().getContentAsString());
     }
+
+
 }
