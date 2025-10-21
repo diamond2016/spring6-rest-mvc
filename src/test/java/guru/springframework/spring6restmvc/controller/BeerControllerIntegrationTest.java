@@ -2,15 +2,19 @@ package guru.springframework.spring6restmvc.controller;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.HttpStatusCode;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.annotation.Rollback;
 import org.springframework.test.web.servlet.MockMvc;
@@ -18,6 +22,8 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.transaction.TransactionSystemException;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.context.WebApplicationContext;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 import guru.springframework.spring6restmvc.entities.Beer;
 import guru.springframework.spring6restmvc.mappers.BeerMapper;
@@ -34,14 +40,19 @@ public class BeerControllerIntegrationTest {
     @Autowired
     BeerRepository beerRepository;
     @Autowired
-    BeerMapper beerMapper;
+    BeerMapper beerMapper;                                        
+
+    @Autowired
+    ObjectMapper objectMapper;                                     // for validations at JPA level
+
     @Autowired
     WebApplicationContext wac;
 
     MockMvc mockMvc;
 
+    @BeforeEach                                                    // if not inserted SetUp is not applied to tests
     void setUp() {
-      mockMvc = MockMvcBuilders.webAppContextSetup(wac).build();  // for validations in repositories
+      mockMvc = MockMvcBuilders.webAppContextSetup(wac).build();  // for validations at JPA level
     }
 
     @Test
@@ -189,5 +200,21 @@ public class BeerControllerIntegrationTest {
     }
     at controller level Validation error is tranformed ad Transaction error
     */
+    }
+
+    // special test: use Mockito in Integration test
+    @Test
+    void testPatchBeerBadName() throws Exception {
+        BeerDTO beerDTOToPatch = beerMapper.beerToBeerDTO(beerRepository.findAll().get(1));
+        beerDTOToPatch.setBeerName("ABC12345678901234567890123456789012345678901234567890");  //> 50 JPA validation false
+
+        //mockMvc = MockMvcBuilders.webAppContextSetup(wac).build();
+        mockMvc.perform(patch(BeerController.BEER_PATH_ID, beerDTOToPatch.getId())
+            .accept(MediaType.APPLICATION_JSON)
+            .contentType(MediaType.APPLICATION_JSON)
+            .content(objectMapper.writeValueAsString(beerDTOToPatch)))
+            .andExpect(status().isBadRequest());
+
+        log.debug("patch Beer bad name - in integration test ");
     }
 }
