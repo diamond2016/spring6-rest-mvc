@@ -55,7 +55,8 @@ public class BeerController {
     //}
 
     @PostMapping(BEER_PATH) 
-    public ResponseEntity<Void> handlePost(@Validated @RequestBody BeerDTO beer) { //@Validated activate JPA validation
+    public ResponseEntity<Void> handlePost(@Validated @RequestBody BeerDTO beer) { 
+        //@Validated in RequestBody activate JPA validation
 
         BeerDTO savedBeer = beerService.saveNewBeer(beer); 
 
@@ -66,8 +67,9 @@ public class BeerController {
     }
 
     @PutMapping(BEER_PATH_ID)
-    public ResponseEntity<Void> updateBeerById(@PathVariable("beerId") UUID beerId, @RequestBody BeerDTO beer) {
-
+    public ResponseEntity<Void> updateBeerById(@PathVariable("beerId") UUID beerId, @Validated @RequestBody BeerDTO beer) { 
+    //@Validated in RequestBody activate JPA validation
+        
         log.debug("update Beer of ID - in controller id: {}", beerId);
         beerService.updateBeerById(beerId, beer).orElseThrow(NotFoundException::new);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
@@ -85,7 +87,9 @@ public class BeerController {
     }
 
     @PatchMapping(BEER_PATH_ID)
-    public ResponseEntity<Void> patchBeerById(@PathVariable("beerId") UUID beerId, @RequestBody BeerDTO beer) {
+    public ResponseEntity<Void> patchBeerById(@PathVariable("beerId") UUID beerId, @Validated @RequestBody BeerDTO beer) {
+        //@Validated in RequestBody activate JPA validation
+        
         beerService.patchBeerById(beerId, beer).orElseThrow(NotFoundException::new);
         log.debug("patch Beer patch of ID - in controller id: {}", beerId);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
