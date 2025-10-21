@@ -208,7 +208,7 @@ public class BeerControllerIntegrationTest {
         BeerDTO beerDTOToPatch = beerMapper.beerToBeerDTO(beerRepository.findAll().get(1));
         beerDTOToPatch.setBeerName("ABC12345678901234567890123456789012345678901234567890");  //> 50 JPA validation false
 
-        //mockMvc = MockMvcBuilders.webAppContextSetup(wac).build();
+        // see at controller CustomErrorController
         mockMvc.perform(patch(BeerController.BEER_PATH_ID, beerDTOToPatch.getId())
             .accept(MediaType.APPLICATION_JSON)
             .contentType(MediaType.APPLICATION_JSON)
