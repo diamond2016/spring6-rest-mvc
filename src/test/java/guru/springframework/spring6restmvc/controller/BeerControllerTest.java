@@ -15,8 +15,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-import java.util.HashMap;
-import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -35,6 +33,7 @@ import org.springframework.web.context.WebApplicationContext;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import guru.springframework.spring6restmvc.model.BeerDTO;
+import guru.springframework.spring6restmvc.model.BeerStyle;
 import guru.springframework.spring6restmvc.services.BeerService;
 import guru.springframework.spring6restmvc.services.BeerServiceImpl;
 import lombok.extern.slf4j.Slf4j;
@@ -160,19 +159,19 @@ public class BeerControllerTest {
     @Test
     void  testPatchBeer() throws Exception {
         BeerDTO beerToPatch = beerServiceImpl.listBeers().get(0);
-        Map<String, Object> beerMap = new HashMap<>();
-        beerMap.put("beerName", "new Name");
+        beerToPatch.setBeerName("lavispateresa"); // change two attributes
+        beerToPatch.setBeerStyle(BeerStyle.PALE_ALE);
         given(beerService.patchBeerById(any(), any())).willReturn(Optional.of(beerToPatch));
         
         mockMvc.perform(patch(BeerController.BEER_PATH_ID, beerToPatch.getId())
             .accept(MediaType.APPLICATION_JSON)
             .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(beerMap))) // body json of the patch request (key-value)
+            .content(objectMapper.writeValueAsString(beerToPatch))) // body json of the patch request (key-value)
             .andExpect(status().isNoContent());
 
         verify(beerService).patchBeerById(uuidArgumentCaptor.capture(), beerArgumentCaptor.capture());
         assertThat(beerToPatch.getId()).isEqualTo(uuidArgumentCaptor.getValue()); 
-        assertThat(beerMap.get("beerName")).isEqualTo(beerArgumentCaptor.getValue().getBeerName()); // parameter passed in call to service check  
+        assertThat(beerToPatch.getBeerName()).isEqualTo(beerArgumentCaptor.getValue().getBeerName()); // parameter passed in call to service check  
     }
 
     @Test
