@@ -3,6 +3,7 @@ package guru.springframework.spring6restmvc.controller;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import java.time.LocalDateTime;
@@ -18,6 +19,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.annotation.Rollback;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.transaction.TransactionSystemException;
 import org.springframework.transaction.annotation.Transactional;
@@ -217,4 +219,27 @@ public class BeerControllerIntegrationTest {
 
         log.debug("patch Beer bad name - in integration test ");
     }
+
+    @Test
+    void testControllerPatchBeerBadName() throws Exception {
+        Beer beerToPatch = beerRepository.findAll().get(0);
+        BeerDTO beerDTOToPatch = beerMapper.beerToBeerDTO(beerToPatch);
+        beerDTOToPatch.setId(null);
+        beerDTOToPatch.setVersion(null);
+        String newName = "ABC12345678901234567890123456789012345678901234567890";
+        beerDTOToPatch.setBeerName(newName);
+        
+        MvcResult result = mockMvc.perform(patch(BeerController.BEER_PATH_ID, beerToPatch.getId())
+            .accept(MediaType.APPLICATION_JSON)
+            .contentType(MediaType.APPLICATION_JSON)
+            .content(objectMapper.writeValueAsString(beerDTOToPatch)))
+            .andExpect(status().isBadRequest())
+            .andExpect(jsonPath("$.length()").value(1))
+            .andReturn();
+
+        System.out.println("Result: " + result.getResponse().getContentAsString());
+        log.debug("patch Beer bad name - in integration test at controller level: ");
+  
+    }
+
 }
