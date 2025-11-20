@@ -10,6 +10,9 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 import jakarta.persistence.Version;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -32,7 +35,12 @@ public class Customer {
     @Version
     private Integer version;  //0,1...
 
+    @NotBlank
+    @NotNull
+    @Size(max = 50)  // this is of jakarta and has priority on next which is of Hibernate  
+    @Column(length = 50)
     private String customerName;
+
     private LocalDateTime createdDate;
     private LocalDateTime lastModifiedDate;
 }
