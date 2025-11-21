@@ -4,13 +4,17 @@ import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
+import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.JdbcTypeCode;
+import org.hibernate.annotations.UpdateTimestamp;
 import org.hibernate.annotations.UuidGenerator;
 import org.hibernate.type.SqlTypes;
 
 import guru.springframework.spring6restmvc.model.BeerStyle;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 import jakarta.persistence.Version;
@@ -50,7 +54,8 @@ public class Beer {
     @Column(length = 50)
     private String beerName;
 
-    @NotNull
+    @Enumerated(EnumType.STRING)
+    @Column(length = 20, nullable = false)
     private BeerStyle beerStyle;
 
     @NotBlank
@@ -59,7 +64,7 @@ public class Beer {
     @Column(length = 255)
     private String upc;
 
-    @DecimalMin("1")
+    @DecimalMin("0.01")
     @NotNull
     @Column(precision = 10, scale = 2, nullable = false)
     private BigDecimal price;
@@ -68,7 +73,9 @@ public class Beer {
     @NotNull
     private Integer quantityOnHand;
     
+    @CreationTimestamp
     private LocalDateTime createdDate;
+    @UpdateTimestamp
     private LocalDateTime lastModifiedDate;
 }
 
