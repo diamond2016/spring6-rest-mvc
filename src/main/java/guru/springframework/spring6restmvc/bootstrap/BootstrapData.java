@@ -2,6 +2,7 @@ package guru.springframework.spring6restmvc.bootstrap;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.Optional;
 
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
@@ -55,9 +56,8 @@ public class BootstrapData implements CommandLineRunner {
                 .createdDate(LocalDateTime.now()) 
                 .lastModifiedDate(LocalDateTime.now())
                 .build();
-
-            beerRepository.save(beerMapper.beerDTOToBeer(morettiDto));
-            beerRepository.save(beerMapper.beerDTOToBeer(villacherDto));
+            Optional.ofNullable(beerMapper.beerDTOToBeer(morettiDto)).ifPresent(beerRepository::save);
+            Optional.ofNullable(beerMapper.beerDTOToBeer(villacherDto)).ifPresent(beerRepository::save);
 
             log.info("Loaded Beer Data. Beer count: " + beerRepository.count());
         }
@@ -76,9 +76,8 @@ public class BootstrapData implements CommandLineRunner {
                     .createdDate(LocalDateTime.now())
                     .lastModifiedDate(LocalDateTime.now())
                     .build();
-
-            customerRepository.save(customerMapper.customerDTOToCustomer(allItalianDto));
-            customerRepository.save(customerMapper.customerDTOToCustomer(villacherRestaurantDto));
+            Optional.ofNullable(customerMapper.customerDTOToCustomer(allItalianDto)).ifPresent(customerRepository::save);
+            Optional.ofNullable(customerMapper.customerDTOToCustomer(villacherRestaurantDto)).ifPresent(customerRepository::save);
 
             log.info("Loaded Customer Data. Customer count: " + customerRepository.count());
         }
