@@ -38,7 +38,7 @@ public class Customer {
     @NotBlank
     @NotNull
     @Size(max = 50)  // this is of jakarta and has priority on next which is of Hibernate  
-    @Column(length = 50)
+    @Column(length = 50, columnDefinition = "varchar", nullable = false)
     private String customerName;
 
     private LocalDateTime createdDate;
