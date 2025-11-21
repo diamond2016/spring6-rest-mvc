@@ -3,7 +3,9 @@ package guru.springframework.spring6restmvc.entities;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
+import org.hibernate.annotations.JdbcTypeCode;
 import org.hibernate.annotations.UuidGenerator;
+import org.hibernate.type.SqlTypes;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -30,6 +32,7 @@ public class Customer {
     @GeneratedValue(generator = "UUID")
     @UuidGenerator
     @Column(length = 36, columnDefinition = "varchar", updatable = false, nullable = false)
+    @JdbcTypeCode(SqlTypes.CHAR)
     private UUID id;
     
     @Version
@@ -38,7 +41,7 @@ public class Customer {
     @NotBlank
     @NotNull
     @Size(max = 50)  // this is of jakarta and has priority on next which is of Hibernate  
-    @Column(length = 50, columnDefinition = "varchar", nullable = false)
+    @Column(length = 50)
     private String customerName;
 
     private LocalDateTime createdDate;
