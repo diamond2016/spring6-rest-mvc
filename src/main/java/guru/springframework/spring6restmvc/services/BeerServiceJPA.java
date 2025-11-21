@@ -38,8 +38,7 @@ public class BeerServiceJPA implements BeerService {
 
     @Override
     public Optional<BeerDTO> getBeerById(UUID id) {
-        return beerRepository.findById(id)
-                .map(beerMapper::beerToBeerDTO); 
+        return beerRepository.findById(id).map(beerMapper::beerToBeerDTO);
     }
 
     @Override
