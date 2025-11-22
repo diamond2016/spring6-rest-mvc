@@ -21,6 +21,8 @@ From Spring Framework 6: Beginner to Guru course [rest-mvc](https://github.com/s
 Upgrade of project to Spring Boot 3.5.0 has been successful, and MapStruct (1.6.0) and Lombok configurations
 
 
- 20.11.2025
+20.11.2025
  Introduced MySql and a new profile to switch between H2 or MYSQL
 
+22.11.2025
+Due to the new release of Spring Boot 45 and Spring framework 7 I'll create a new project in line with the rector of the project itself:[new-rest-mvc] https://github.com/springframeworkguru/spring-7-rest-mvc  
