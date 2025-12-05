@@ -25,4 +25,4 @@ Upgrade of project to Spring Boot 3.5.0 has been successful, and MapStruct (1.6.
  Introduced MySql and a new profile to switch between H2 or MYSQL
 
 22.11.2025
-Due to the new release of Spring Boot 4 and Spring framework 7 I'll create a new project:[new-rest-mvc](https://github.com/springframeworkguru/spring-7-rest-mvc)
+Due to the new release of Spring Boot 4 and Spring framework 7 I'll create a new project:[new-rest-mvc](https://github.com/diamond2016/spring-7-rest-mvc)
