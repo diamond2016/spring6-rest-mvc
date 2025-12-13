@@ -103,8 +103,8 @@ public class BeerRepositoryTest {
 
     @Test
     void testFindAll() {
-        Beer beer1 = Beer.builder().beerName("Beer1").upc("000111222333").build();
-        Beer beer2 = Beer.builder().beerName("Beer2").upc("444555666777").build();
+        Beer beer1 = Beer.builder().beerName("Beer1").upc("000111222333").price(BigDecimal.valueOf(10.0)).beerStyle(BeerStyle.IPA).quantityOnHand(100).build();
+        Beer beer2 = Beer.builder().beerName("Beer2").upc("444555666777").price(BigDecimal.valueOf(12.0)).beerStyle(BeerStyle.LAGER).quantityOnHand(150).build();
 
         beerRepository.save(beer1);
         beerRepository.save(beer2);
