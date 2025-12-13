@@ -72,6 +72,8 @@ public class BeerRepositoryTest {
         Beer beer = Beer.builder()
                 .beerName("FindMe")
                 .upc("987654321098")
+                .price(BigDecimal.valueOf(10.3))
+                .quantityOnHand(100)
                 .build();
 
         Beer savedBeer = beerRepository.save(beer);
@@ -87,6 +89,8 @@ public class BeerRepositoryTest {
         Beer beer = Beer.builder()
                 .beerName("DeleteMe")
                 .upc("111222333444")
+                .price(BigDecimal.valueOf(8.0))
+                .quantityOnHand(500)
                 .build();
 
         Beer savedBeer = beerRepository.save(beer);
@@ -108,5 +112,25 @@ public class BeerRepositoryTest {
         var beers = beerRepository.findAll();
 
         assertThat(beers.size() >= 2);
+    }
+
+    @Test
+    void testFindByUpc() {
+        String upc = "555666777888";
+        Beer beer = Beer.builder()
+                .beerName("FindMe")
+                .upc(upc)
+                .beerStyle(BeerStyle.IPA)
+                .price(BigDecimal.valueOf(12.3))
+                .quantityOnHand(200)
+                .build();
+
+        Beer savedBeer = beerRepository.save(beer);
+
+        var foundBeer = beerRepository.findByUpc(upc);
+
+        assertThat(foundBeer).isNotNull();
+        assertThat(foundBeer.getBeerName().equals("FindMe"));
+        assertThat(foundBeer.getUpc().equals(savedBeer.getUpc()));
     }
 }
